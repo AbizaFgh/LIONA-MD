@@ -3,6 +3,8 @@ const axios = require('axios');
 module.exports = function(app) {
     const RAW_URL = 'https://raw.githubusercontent.com/hazelnuttty/API/main/sistem.json';
 
+    const validKeys = ['VELIN', 'HAZEL', 'HAZEL GANTENG'];
+
     function getWaktuSekarang() {
         const now = new Date();
         const yyyy = now.getFullYear();
@@ -22,7 +24,30 @@ module.exports = function(app) {
     }
 
     app.get('/generate/createapikey', async (req, res) => {
-        const nama = req.query.name || 'anonymous';
+        const key = req.query.key;
+
+        if (!key) {
+            return res.status(400).json({
+                status: false,
+                message: 'Parameter key wajib diisi',
+                contoh: '/generate/createapikey?key=VELIN'
+            });
+        }
+
+        const keyLower = key.toLowerCase();
+        const validLowerKeys = validKeys.map(k => k.toLowerCase());
+
+        if (!validLowerKeys.includes(keyLower)) {
+            return res.status(403).json({
+                status: false,
+                message: 'Akses ditolak. Key tidak valid.',
+                allowed_keys: validKeys
+            });
+        }
+
+        // tentukan user role berdasarkan key
+        const userRole = keyLower === 'velin' ? 'DEVELOPER' : 'ADMIN';
+
         const waktu = getWaktuSekarang();
 
         try {
@@ -39,7 +64,7 @@ module.exports = function(app) {
             res.json({
                 status: true,
                 creator: 'Hazel',
-                user: nama,
+                user: userRole,
                 "your apikey": selected.apikey,
                 "apikey status": selected.status,
                 "expired api": "No expired",

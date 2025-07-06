@@ -199,11 +199,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
 // === STATIC FILES ===
-app.use('/', express.static(path.join(__dirname, 'home')));
-app.use('/api-page', express.static(path.join(__dirname, 'api-page')));
+app.use('/', express.static(path.join(__dirname, 'api-page')));
 app.use('/src', express.static(path.join(__dirname, 'src')));
-app.use('/dashboard', express.static(path.join(__dirname, 'dashboard')));
-app.use('/admin', express.static(path.join(__dirname, 'admin')));
 
 // === LOAD ROUTES ===
 let totalRoutes = 0;

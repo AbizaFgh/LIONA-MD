@@ -600,8 +600,17 @@
                     "desc": "Check your informasition",
                     "path": "/api-status/informasiuser",
                     "status": "Ready"
+                },
+                {
+                    "name": "Create Apikey",
+                    "desc": "Khusus owner dan team",
+                    "path": "/generate/createapikey?key=",
+                    "status": "Eror",
+                    "params": {
+                        "key": "Masukan key admin"
+                   }
                 }
             ]
         }
     ]
-}
+}     
