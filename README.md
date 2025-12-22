@@ -1,145 +1,123 @@
-# Falcon API UI
+[![Hazelnuts](./assets/liona.jpg)](https://zelapioffciall.koyeb.app)
+<p align="center">
+  <img src="https://img.shields.io/badge/-Node.js-339933?style=flat&logo=nodedotjs&logoColor=white" alt="2">
+  <img src="https://img.shields.io/badge/Telegram-26A5E4?style=flat&logo=telegram&logoColor=white" alt="0">
+  <img src="https://img.shields.io/badge/npm_Package-CB3837?style=flat&logo=npm&logoColor=white" alt="2">
+  <img src="https://img.shields.io/badge/Node-Telegram_API-339933?style=flat&logo=nodedotjs&logoColor=white" alt="5">
+</p>
 
-A modern, clean, and user-friendly interface for browsing and testing Falcon API endpoints.
+---
+**WHY CHOOSE LIONA-MD?**
 
-![Falcon API UI Screenshot](image.png)
-
-## Features
-
-- 🌓 **Light/Dark Mode**: Toggle between light and dark themes with automatic preference saving
-- 🔍 **Smart Search**: Quickly find endpoints by name or description
-- 📱 **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
-- 🔄 **API Status Indicators**: Visual indicators showing the status of each endpoint (ready, error, update)
-- 📋 **Copy to Clipboard**: One-click copying of API endpoints and responses
-- 📊 **JSON Highlighting**: Beautifully formatted JSON responses with syntax highlighting
-- 📝 **Detailed Parameter Forms**: Clearly labeled input fields with tooltips for parameter descriptions
-
-## Getting Started
-
-### Prerequisites
-
-- Web server (Apache, Nginx, etc.)
-- Modern web browser
-
-### Installation
-
-1. Clone this repository to your web server:
-   ```bash
-   git clone https://github.com/FlowFalcon/falcon-api-ui.git
-   ```
-
-2. Configure your API endpoints in `settings.json` (see Configuration section below)
-
-3. Access the UI through your web server (e.g., `https://your-domain.com/falcon-api-ui/`)
-
-## Configuration
-
-All API endpoints and categories are configured in the `settings.json` file. The structure is as follows:
-
-```json
-{
-  "name": "Falcon-Api",
-  "version": "v1.2",
-  "description": "Simple and easy to use API.",
-  "bannerImage": "/src/banner.jpg",
-  "header": {
-    "status": "Online!"
-  },
-  "apiSettings": {
-    "creator": "FlowFalcon", 
-    "apikey": ["falcon-api"]
-  },
-  "categories": [
-    {
-      "name": "Category Name",
-      "image": "/api/placeholder/800/200",
-      "items": [
-        {
-          "name": "Endpoint Name",
-          "desc": "Endpoint description",
-          "path": "/api/endpoint?param=",
-          "status": "ready", // Can be "ready", "error", or "update"
-          "params": {
-            "param": "Description of the parameter"
-          }
-        }
-      ]
-    }
-  ]
-}
+Liona is a telegram bot with a cjs plugin type that is very easy for beginner developers, Liona itself has been integrated with scrape and API.
+---
+**HOW TO RUN LIONA-MD**
 ```
+// IN VPS
 
-### Adding a New Endpoint
+sudo apt update
+sudo apt upgrade
+sudo apt install git -y
+gitclone https://github.com/hazenuttty/liona-md
+cd liona-md
+mv liona-md/* liona-md/.[!.]* liona-md/..?* /root/
+npm install
+npm start //FYI before you run, change the token and owner ID in config.js first.
+```
+---
+**EXAMPLE CODE**
+```
+// EXAMPLE OF CALLING THE SCRAPER FUNCTION
 
-To add a new endpoint:
+module.exports = {
+  name: 'skoleai',
+  aliases: ['ai'],
+  async execute(bot, msg, args) {
+    const chatId = msg.chat.id
+    const question = args.join(' ')
+    if (!question) return bot.sendMessage(chatId, 'tanya apa saja')
 
-1. Find the appropriate category in the `categories` array or create a new one
-2. Add a new object to the `items` array with the following properties:
-   - `name`: Display name of the endpoint
-   - `desc`: Brief description of what the endpoint does
-   - `path`: The API path, including any query parameters
-   - `status`: Status of the endpoint (`"ready"`, `"error"`, or `"update"`)
-   - `params`: Object containing parameter names as keys and descriptions as values
-
-Example:
-```json
-{
-  "name": "User Info",
-  "desc": "Get user information by ID",
-  "path": "/api/user?id=",
-  "status": "ready",
-  "params": {
-    "id": "User ID number"
+    const res = await bot.skoleAI(question) // THIS IS A SCRAPER CALL
+    bot.sendMessage(chatId, res)
   }
 }
 ```
+``` 
+// API PROVIDER CALL EXAMPLE
 
-## Customization
+const axios = require('axios')
+const print = require('../lib/print.js')
+const config = require('../config.js')
 
-### Theme Colors
+module.exports = {
+  name: 'sertifikatolol',
+  aliases: [],
+  category: 'canvas',
+  description: 'Canvas Sertifikat Olol',
+  async execute(bot, msg, args) {
+    const chatId = msg.chat.id
 
-You can customize the colors by modifying the CSS variables in the `styles.css` file:
+    try {
+      const text = args.join(' ') || 'hai'
+      const url = `${config.apiProvider}/canvas/sertifikatolol?text=${encodeURIComponent(text)}` //${config.apiPovider} API CALL EXAMPLE
 
-```css
-:root {
-  --primary-color: #4361ee;
-  --secondary-color: #3a86ff;
-  --accent-color: #4cc9f0;
-  /* Additional color variables... */
+      const res = await axios.get(url, {
+        responseType: 'arraybuffer'
+      })
+
+      if (!res.data) {
+        return bot.sendMessage(chatId, 'error')
+      }
+
+      await bot.sendPhoto(
+        chatId,
+        Buffer.from(res.data),
+        { caption: 'hasil canvas' }
+      )
+
+    } catch (e) {
+      print.error(e, 'Canvas SertifikatOlol Command')
+      await bot.sendMessage(chatId, 'error')
+    }
+  }
 }
 ```
-
-### Banner Image
-
-Change the banner image by updating the `bannerImage` property in `settings.json`:
-
-```json
-{
-  "bannerImage": "/path/to/your/banner.jpg"
-}
-```
-
-## Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgements
-
-- [Font Awesome](https://fontawesome.com/) for icons
-- [Bootstrap](https://getbootstrap.com/) for layout components
-- [Inter Font](https://fonts.google.com/specimen/Inter) for typography
-
 ---
-
-Created with ❤️ by [FlowFalcon](https://github.com/FlowFalcon)
+**SYSTEM STRUCTURE**
+```
+├── config.js //CONFIG/FILE SETTING FUNCTION
+├── index.js //MAIN FILE
+├── lib
+│   ├── autoReload.js //AUTORELOAD IF THERE ARE CHANGES IN ALL FILES
+│   ├── handler.js //HANDLER BUTTON AND RUNTIME FUNCTION
+│   ├── login.js //LOGIN TELEGRAM FUNCTION
+│   ├── myfunction.js //SCRAPE FUNCTION
+│   └── print.js
+├── media
+│   └── image.jpg //BANNER MENU
+├── package.json //PACKAGE NODEJS
+└── plugins 
+    ├── claila.js
+    ├── donghua.js
+    ├── eval.js
+    ├── exec.js
+    ├── hadist.js
+    ├── hadistdetail.js
+    ├── hubble.js
+    ├── jadwalsholat.js
+    ├── menu.js
+    ├── menubutton.js
+    ├── ping.js
+    ├── plugins.js
+    ├── runtime.js
+    ├── schoolhub.js
+    ├── sertifikat.js
+    ├── setmode.js
+    ├── shionai.js
+    ├── sticker.js
+    ├── tiktokmp3.js
+    └── turnitin.js
+```
+---
+**CONTACT DEVELOPER**
+• t.me/hazeloffc
