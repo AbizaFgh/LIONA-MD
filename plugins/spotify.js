@@ -1,33 +1,38 @@
 import axios from 'axios'
 
 const handler = async (m, { text, conn }) => {
-    if (!text) throw 'Masukkan URL Spotify\n\nContoh:\nhttps://open.spotify.com/track/xxxx'
+    if (!text) throw 'Masukkan link Spotify'
+
+    await m.reply('⏳ Tunggu bentar, ngambil data Spotify...')
 
     try {
         const { data } = await axios.post(
             'https://sssspotify.com/api/download/get-url',
             { url: text },
             {
+                timeout: 15000,
                 headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json',
-                    'User-Agent': 'Mozilla/5.0'
+                    'User-Agent': 'Mozilla/5.0',
+                    'Content-Type': 'application/json'
                 }
             }
         )
 
-        if (data.code !== 200) throw 'Gagal mengambil data Spotify'
+        if (data.code !== 200) throw 'Gagal ambil data'
 
-        const downloadUrl =
+        const download =
             data.downloadUrl ||
             `https://sssspotify.com${data.originalVideoUrl}`
+
+        let txt = `🎧 *Spotify Downloader*\n\n`
+        txt += `🎵 Judul : ${data.title}\n`
+        txt += `👤 Artist : ${data.authorName}\n\n`
+        txt += `⬇️ Download:\n${download}`
 
         await conn.sendMessage(
             m.chat,
             {
-                audio: { url: downloadUrl },
-                mimetype: 'audio/mpeg',
-                fileName: `${data.title}.mp3`,
+                text: txt,
                 contextInfo: {
                     externalAdReply: {
                         title: data.title,
@@ -46,9 +51,9 @@ const handler = async (m, { text, conn }) => {
     }
 }
 
-handler.help = ['spotifydl <url>']
+handler.command = /^(spotify|spotifydl)$/i
 handler.tags = ['downloader']
-handler.command = /^(spotifydl|spotify)$/i
+handler.help = ['spotify <url>']
 handler.limit = false
 
 export default handler
