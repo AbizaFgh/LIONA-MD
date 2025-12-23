@@ -1,6 +1,6 @@
 module.exports = {
   ownerID: ["5632941237"],
-  token : "8423986609:AAH39tFMHeO_yAi-3RaqEfSWZGkuJV1p5V4",
+  token : "8364756270:AAG-ru55ipnJZggOiG2aXtFjRtZ09j6nxmw",
   prefix: ".",
   botMode: 'self',
   apiProvider: 'https://zelapioffciall.koyeb.app',  
